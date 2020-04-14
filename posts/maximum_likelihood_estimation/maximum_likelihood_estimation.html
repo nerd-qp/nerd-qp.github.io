@@ -23,19 +23,20 @@ derivation of course :) The idea of inferencing parameters or
 characteristics of probabilistic models goes a long way. Note that the
 method I use here is entirely for building intuition, it is not a real
 way of statistical inference (not suitable for other types of
-distributions).</p><h3 id=auto-5>2.2<span style=margin-left:1em></span>Formal definition of MLE<span style=margin-left:1em></span></h3><p>Now, what is MLE? Suppose we are given a group of \(i.i.d.\) data
-sampled from some unknown distribution \(P\). Assume that there exists a
-parametric family \(P_{\phi}\), such that \(P \in P_{\phi}\), and \(\phi
-\in \Phi\), where \(\Phi\) is the parameter space, usually a Euclidean
-space taking the form \(\mathbb{R}^d\). In other words, we can find a
-\(\phi^{\ast} \in \Phi\), such that \(P = P_{\phi^{\ast}}\) (note that
-we haven't defined what equality means for distribution).</p><center>\(\displaystyle X_n \sim P_{\phi^{\ast}}\)</center><p>Usually, in continuous case, we would represent distribution
+distributions).</p><h3 id=auto-5>2.2<span style=margin-left:1em></span>Formal definition of MLE<span style=margin-left:1em></span></h3><p>Now, what is MLE[<a href=#bib-MaximumLikelihoodEstimation2020>1</a>]? Suppose we are given a group of
+\(i.i.d.\) data sampled from some unknown distribution \(P\). Assume
+that there exists a parametric family \(P_{\phi}\), such that \(P \in
+P_{\phi}\), and \(\phi \in \Phi\), where \(\Phi\) is the parameter
+space, usually a Euclidean space taking the form \(\mathbb{R}^d\). In
+other words, we can find a \(\phi^{\ast} \in \Phi\), such that \(P =
+P_{\phi^{\ast}}\) (note that we haven't defined what equality means for
+distribution).</p><center>\(\displaystyle X_n \sim P_{\phi^{\ast}}\)</center><p>Usually, in continuous case, we would represent distribution
 \(P_{\phi}\) with a probabilistic density function \(f_{\phi} (x)\).
 Then as we can see, this function actually takes in two arguments, one
 is parameter \(\phi\), another observation \(x\), which can be rewritten
 as likelihood function if we know all the observations \(X_n\):</p><center>\(\displaystyle L (\phi |X_1, \ldots, X_n) = f_{\phi} (X_1, X_2, \ldots,
 X_n) = f_{\phi} (X_1)
-\cdots f_{\phi} (X_n)\)</center><p>(cite wikipedia)[<a href=#bib-MaximumLikelihoodEstimation2020>1</a>]</p><p>Now, given all the parameters we can choose from \(\Phi\), what is the
+\cdots f_{\phi} (X_n)\)</center><p>Now, given all the parameters we can choose from \(\Phi\), what is the
 most probable parameter we can choose that best fits these data? One
 good candidate, is the parameter \(\phi\) can make this joint
 distribution's PDF largest, or likelihood function largest. From here,
