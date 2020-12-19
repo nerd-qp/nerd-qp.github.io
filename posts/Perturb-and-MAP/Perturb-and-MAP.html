@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:x="https://www.texmacs.org/2002/extensions" xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <head>
+    <title>No title</title>
+    <meta content="TeXmacs 1.99.17" name="generator"></meta>
+    <style type="text/css">
+      body { text-align: justify } h5 { display: inline; padding-right: 1em }
+      h6 { display: inline; padding-right: 1em } table { border-collapse:
+      collapse } td { padding: 0.2em; vertical-align: baseline } dt { float:
+      left; min-width: 1.75em; text-align: right; padding-right: 0.75em;
+      font-weight: bold; } dd { margin-left: 2.75em; padding-bottom: 0.25em; }
+      dd p { padding-top: 0em; } .subsup { display: inline; vertical-align:
+      -0.2em } .subsup td { padding: 0px; text-align: left} .fraction {
+      display: inline; vertical-align: -0.8em } .fraction td { padding: 0px;
+      text-align: center } .wide { position: relative; margin-left: -0.4em }
+      .accent { position: relative; margin-left: -0.4em; top: -0.1em }
+      .title-block { width: 100%; text-align: center } .title-block p {
+      margin: 0px } .compact-block p { margin-top: 0px; margin-bottom: 0px }
+      .left-tab { text-align: left } .center-tab { text-align: center }
+      .balloon-anchor { border-bottom: 1px dotted #000000; outline: none;
+      cursor: help; position: relative; } .balloon-anchor [hidden] {
+      margin-left: -999em; position: absolute; display: none; }
+      .balloon-anchor: hover [hidden] { position: absolute; left: 1em; top:
+      2em; z-index: 99; margin-left: 0; width: 500px; display: inline-block; }
+      .balloon-body { } .ornament { border-width: 1px; border-style: solid;
+      border-color: black; display: inline-block; padding: 0.2em; } .right-tab
+      { float: right; position: relative; top: -1em; } .no-breaks {
+      white-space: nowrap; } 
+    </style>
+    <link href="https://www.texmacs.org/css/web-article-colored.css" type="text/css" rel="stylesheet"></link>
+  </head>
+  <body>
+    <h2 id="auto-1">1<span style="margin-left: 1em"></span>Introduction<span style="margin-left: 1em"></span></h2>
+    <p>
+      Perturbation and Maximum A-Posteriori (Perturb-and-MAP) is ubiquitous in
+      the field of statistic learning, derived from the wonderful property of
+      Gumbel distribution, which gives the connection between maximization of
+      a series of random perturbated variables and summation. It is often used
+      to tackle the problem of computational intractable summation of the form
+      <span class="no-breaks"><img src="Perturb-and-MAP-1.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0358421052631579em; margin-right: -0.0269473684210535em; margin-top: -0.0337368421052632em; vertical-align: -0.541842105263158em; height: 1.45347368421053em"></img>,</span> where <span class="no-breaks"><img
+      src="Perturb-and-MAP-2.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.040421052631579em; margin-right: -0.0269473684210535em; margin-top: -0.0277368421052631em; vertical-align: -0.161052631578947em; height: 0.996421052631579em"></img>.</span> To show its intractability, simply take all
+      as <img src="Perturb-and-MAP-3.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0292105263157895em; margin-right: -0.0269473684210526em; margin-top: -0.0337368421052632em; vertical-align: -0.280684210526316em; height: 1.18568421052632em"></img> for <span class="no-breaks"><img src="Perturb-and-MAP-4.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0242105263157895em; margin-right: -0.0269473684210526em; margin-top: -0.0409999999999999em; vertical-align: -0.218315789473684em; height: 1.024em"></img>,</span>
+      and the sum (or partition function) thus becomes:
+    </p>
+    <center>
+      <img src="Perturb-and-MAP-5.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.032578947368421em; margin-right: -0.0269473684210553em; margin-top: -0.0404210526315791em; vertical-align: -1.51189473684211em; height: 2.62368421052632em"></img>
+    </center>
+    <p>
+      A simple look into this expression confirms that it scales exponentially
+      with <span class="no-breaks"><img src="Perturb-and-MAP-6.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0404210526315789em; margin-right: -0.0269473684210526em; margin-top: -0.0420526315789473em; vertical-align: 0em; height: 0.565894736842105em"></img>,</span> undesirable if we want
+      to model and solve large scale combinatorial problem which requires this
+      summation. Fortunately, some researchers have developed a tractable
+      solution to approximate this summation, with the help of the gumbel
+      distribution, and that is what this post is about.
+    </p>
+    <h2 id="auto-2">2<span style="margin-left: 1em"></span>Gumbel distribution<span style="margin-left: 1em"></span></h2>
+    <p>
+      We cannot proceed without a proper introduction of gumbel distribution
+      [<a href="#bib-GumbelDistribution2019">2</a>]. A gumbel distribution <img src="Perturb-and-MAP-7.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0292105263157895em; margin-right: -0.0269473684210526em; margin-top: -0.0337368421052632em; vertical-align: -0.280684210526316em; height: 1.18568421052632em"></img> has a
+      cumulative density function:
+    </p>
+    <center>
+      <img src="Perturb-and-MAP-8.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0292105263157895em; margin-right: -0.0269473684210517em; margin-top: -0.0236315789473684em; vertical-align: -0.280684210526316em; height: 1.46663157894737em"></img>
+    </center>
+    <p>
+      The standard gumbel distribution has <img src="Perturb-and-MAP-9.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0511578947368421em; margin-right: -0.0269473684210526em; margin-top: -0.0579473684210526em; vertical-align: -0.218315789473684em; height: 1.05094736842105em"></img> and <span
+      class="no-breaks"><img src="Perturb-and-MAP-10.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0242105263157895em; margin-right: -0.0269473684210526em; margin-top: -0.0422105263157895em; vertical-align: -0.218315789473684em; height: 1.06442105263158em"></img>.</span> In the following, I will refer
+      <img src="Perturb-and-MAP-11.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0673684210526316em; margin-right: -0.0269473684210526em; margin-top: -0.0486315789473685em; vertical-align: 0em; height: 0.889263157894737em"></img> without any parameters as the standard gumbel
+      distribution. One of the important properties that leads to the
+      connection between maximization and summation is as follows:
+    </p>
+    <p style="margin-top: 1em">
+      <strong>Theorem <class style="font-style: normal">1</class>. </strong><i><center>
+        <img src="Perturb-and-MAP-12.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0314736842105263em; margin-right: -0.0269473684210553em; margin-top: -0.0494210526315788em; vertical-align: -1.67436842105263em; height: 3.44926315789474em"></img>
+      </center></i>
+    </p>
+    <p>
+      <i><span class="no-breaks"><img src="Perturb-and-MAP-13.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0292105263157895em; margin-right: -0.0269473684210526em; margin-top: -0.0337368421052632em; vertical-align: -0.280684210526316em; height: 1.18568421052632em"></img>,</span> with a size of <span
+      class="no-breaks"><img src="Perturb-and-MAP-14.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0292105263157895em; margin-right: -0.0269473684210526em; margin-top: -0.0337368421052632em; vertical-align: -0.280684210526316em; height: 1.18568421052632em"></img>,</span> is indentically, independently
+      distributed (i.i.d.) according to <img src="Perturb-and-MAP-15.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0673684210526316em; margin-right: -0.0269473684210526em; margin-top: -0.0486315789473685em; vertical-align: 0em; height: 0.889263157894737em"></img> and <img src="Perturb-and-MAP-16.png"
+      style="margin-left: -0.0269473684210526em; margin-bottom: -0.0511578947368421em; margin-right: -0.0519999999999999em; margin-top: -0.0420526315789473em; vertical-align: -0.218315789473684em; height: 0.794947368421053em"></img> is the Euler-Mascheroni cosntant [<a href="#bib-EulerMascheroniConstant2020">1</a>].</i>
+    </p>
+    <p style="margin-top: 1em">
+      <i><strong>Proof. </strong></i>
+    </p>
+    <p>
+      <i>Let <span class="no-breaks"><img src="Perturb-and-MAP-17.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0358421052631579em; margin-right: -0.0269473684210517em; margin-top: -0.0337368421052632em; vertical-align: -0.313842105263158em; height: 1.22547368421053em"></img>,</span></i>
+    </p>
+    <p>
+      <i><center>
+        <img src="Perturb-and-MAP-18.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.02921052631579em; margin-right: -0.0269473684210553em; margin-top: -0.0335789473684223em; vertical-align: -8.98357894736842em; height: 18.5356315789474em"></img>
+      </center></i>
+    </p>
+    <p>
+      <i>Hence <span class="no-breaks"><img src="Perturb-and-MAP-19.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0292105263157895em; margin-right: -0.0269473684210517em; margin-top: -0.0337368421052632em; vertical-align: -0.280684210526316em; height: 1.18568421052632em"></img>,</span> whose expectation
+      <span class="no-breaks"><img src="Perturb-and-MAP-20.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0292105263157895em; margin-right: -0.0520000000000014em; margin-top: -0.0337368421052632em; vertical-align: -0.280684210526316em; height: 1.18568421052632em"></img>.</span></i>
+    </p>
+    <p style="margin-bottom: 1em">
+      <i><center>
+        <img src="Perturb-and-MAP-21.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0358421052631579em; margin-right: -0.0269473684210517em; margin-top: -0.0359473684210527em; vertical-align: -0.935105263157895em; height: 2.19536842105263em"></img>
+      </center><span style="margin-left: 1em"></span><img src="Perturb-and-MAP-22.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0269473684210526em; margin-right: -0.0269473684210527em; margin-top: -0.0371052631578946em; vertical-align: 0em; height: 0.821894736842105em"></img></i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      This theorem, while interesting, does not give us the practical
+      algorithm to calculate the sum. To estimate this expectation, we still
+      need the same amount of gumbel variables as cartesian space <span class="no-breaks"><img
+      src="Perturb-and-MAP-23.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0269473684210526em; margin-right: -0.223947368421053em; margin-top: -0.0277368421052631em; vertical-align: 0em; height: 0.821894736842105em"></img>.</span> Luckily, as proposed in [<a href="#bib-hazanPartitionFunctionRandom">3</a>], we
+      have an alternative form to compute the expectation.
+    </p>
+    <p style="margin-top: 1em">
+      <strong>Theorem <class style="font-style: normal">2</class>. </strong><i><a id="theorem:2"></a> Let
+      <span class="no-breaks"><img src="Perturb-and-MAP-24.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0358421052631579em; margin-right: -0.0269473684210517em; margin-top: -0.0337368421052632em; vertical-align: -0.313842105263158em; height: 1.22547368421053em"></img>,</span> i.i.d. Then</i>
+    </p>
+    <p>
+      <i><center>
+        <img src="Perturb-and-MAP-25.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0314736842105263em; margin-right: -0.0269473684210553em; margin-top: -0.049421052631579em; vertical-align: -1.40352631578947em; height: 3.44926315789474em"></img>
+      </center></i>
+    </p>
+    <p style="margin-top: 1em">
+      <i><strong>Proof. </strong></i>
+    </p>
+    <p>
+      <i>To give out some intuition of the proof, we can take some baby
+      steps.</i>
+    </p>
+    <p>
+      <i>Given any <span class="no-breaks"><img src="Perturb-and-MAP-26.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.00142105263157893em; margin-right: -0.0269473684210535em; margin-top: -0.0277368421052631em; vertical-align: -0.254578947368421em; height: 1.05094736842105em"></img>,</span> we take the
+      sum over <span class="no-breaks"><img src="Perturb-and-MAP-27.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0376842105263158em; margin-right: -0.0269473684210531em; margin-top: -0.0277368421052631em; vertical-align: -0.218315789473684em; height: 1.05094736842105em"></img>,</span></i>
+    </p>
+    <p>
+      <i><center>
+        <img src="Perturb-and-MAP-28.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0314736842105263em; margin-right: -0.0269473684210553em; margin-top: -0.0494210526315788em; vertical-align: -1.67436842105263em; height: 3.44926315789474em"></img>
+      </center></i>
+    </p>
+    <p>
+      <i>For convenience, denote</i>
+    </p>
+    <p>
+      <i><center>
+        <img src="Perturb-and-MAP-29.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0314736842105263em; margin-right: -0.0269473684210553em; margin-top: -0.0494210526315788em; vertical-align: -1.67436842105263em; height: 3.44926315789474em"></img>
+      </center></i>
+    </p>
+    <p>
+      <i>Likewise, given <span class="no-breaks"><img src="Perturb-and-MAP-30.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.00142105263157893em; margin-right: -0.0269473684210535em; margin-top: -0.0277368421052631em; vertical-align: -0.254578947368421em; height: 1.05094736842105em"></img>,</span> we
+      have,</i>
+    </p>
+    <p>
+      <i><center>
+        <img src="Perturb-and-MAP-31.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0314736842105257em; margin-right: -0.0269473684210482em; margin-top: -0.0494210526315788em; vertical-align: -6.58142105263158em; height: 13.7493684210526em"></img>
+      </center></i>
+    </p>
+    <p>
+      <i>Wash, rinse, repeat.</i>
+    </p>
+    <p>
+      <i></i>
+    </p>
+    <p>
+      <i>Now formally, like above, denote</i>
+    </p>
+    <p>
+      <i><center>
+        <img src="Perturb-and-MAP-32.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.026em; margin-right: -0.0269473684210482em; margin-top: -0.049421052631579em; vertical-align: -1.40894736842105em; height: 3.44926315789474em"></img>
+      </center></i>
+    </p>
+    <p>
+      <i>We assume,</i>
+    </p>
+    <p>
+      <i><center>
+        <img src="Perturb-and-MAP-33.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0314736842105263em; margin-right: -0.0269473684210517em; margin-top: -0.0494210526315788em; vertical-align: -1.70110526315789em; height: 3.44926315789474em"></img>
+      </center></i>
+    </p>
+    <p>
+      <i>We know from above that when <span class="no-breaks"><img src="Perturb-and-MAP-34.png" style="margin-left: -0.0269473684210526em; margin-bottom: 0.0531052631578947em; margin-right: -0.0269473684210526em; margin-top: -0.0287368421052632em; vertical-align: -0.0935263157894737em; height: 0.848842105263158em"></img>,</span>
+      this is true.</i>
+    </p>
+    <p>
+      <i>As for its next recursion, we need to prove that,</i>
+    </p>
+    <p>
+      <i><center>
+        <img src="Perturb-and-MAP-35.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0314736842105248em; margin-right: -0.0269473684210482em; margin-top: -0.0494210526315797em; vertical-align: -8.5561052631579em; height: 17.6987894736842em"></img>
+      </center></i>
+    </p>
+    <p>
+      <i>With induction,</i>
+    </p>
+    <p style="margin-bottom: 1em">
+      <i><center>
+        <img src="Perturb-and-MAP-36.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0314736842105263em; margin-right: -0.0269473684210553em; margin-top: -0.049421052631579em; vertical-align: -1.40352631578947em; height: 3.44926315789474em"></img>
+      </center><span style="margin-left: 1em"></span><img src="Perturb-and-MAP-22.png" style="margin-left: -0.0269473684210526em; margin-bottom: -0.0269473684210526em; margin-right: -0.0269473684210527em; margin-top: -0.0371052631578946em; vertical-align: 0em; height: 0.821894736842105em"></img></i>
+    </p>
+    <p>
+      With this Theorem <a href="#theorem:2">2</a>, we only need to estimate <img src="Perturb-and-MAP-6.png"
+      style="margin-left: -0.0269473684210526em; margin-bottom: -0.0404210526315789em; margin-right: -0.0269473684210526em; margin-top: -0.0420526315789473em; vertical-align: 0em; height: 0.565894736842105em"></img> random gumbel variables.
+    </p>
+    <h2 id="auto-3">3<span style="margin-left: 1em"></span>Personal remarks<span style="margin-left: 1em"></span></h2>
+    <p>
+      This blog is nearly two months overdue, in my opinion, there are two
+      reasons for it. First of all, I think this article does not bring much
+      knowledge to the table, a &ldquo;rip-off&rdquo; from other people's
+      work. Therefore, I am reluctant to publish this article. Second of all,
+      it takes away huge chunks of my time to write (borrow) something
+      worthwhile, and I am always busy even though sometimes I don't know why
+      I am so busy :). Thus, I am also reluctant to spend time writing up
+      &ldquo;rip-off&rdquo; articles such as this. It takes great efforts to
+      present knowledge in an accessible manner, which I do not claim this
+      article is. In light of such circumstances and some advice taken from <a
+      href="http://matt.might.net/articles/how-to-blog-as-an-academic/">Matt Might on low-cost blogging</a>, I may have to change my
+      positioning of this blog: from writing up my original thinkings to
+      borrowing knowledge from other sources or even just a byproduct of
+      reading some papers along with a little bit of my interpretation. The
+      main purpose of this blog is to train me to engage in academic writings
+      as well as correcting my mental models on various problems and
+      solutions. It may not be as rigorous and complete when first published,
+      but it will be refined over time. In this way, I may find it more
+      approachable.
+    </p>
+    <h2 id="auto-4">Bibliography<span style="margin-left: 1em"></span></h2>
+    <div class="compact-block" style="text-indent: 0em">
+      <font style="font-size: 84.0%"><dl>
+        <p>
+          <dt>
+            <strong>[1]  </strong>
+          </dt>
+          <dd>
+            <p>
+              <a id="bib-EulerMascheroniConstant2020"></a>Euler&ndash;Mascheroni constant. Page Version ID:
+              943784573.
+            </p>
+          </dd>
+        </p>
+        <p>
+          <dt>
+            <strong>[2]  </strong>
+          </dt>
+          <dd>
+            <p>
+              <a id="bib-GumbelDistribution2019"></a>Gumbel distribution. Page Version ID: 930259942.
+            </p>
+          </dd>
+        </p>
+        <p>
+          <dt>
+            <strong>[3]  </strong>
+          </dt>
+          <dd>
+            <p>
+              <a id="bib-hazanPartitionFunctionRandom"></a>Tamir Hazan and Tommi Jaakkola. On the Partition
+              Function and Random Maximum A-Posteriori Perturbations. Page 8.
+            </p>
+          </dd>
+        </p>
+      </dl></font>
+    </div>
+  </body>
+</html>
