@@ -1,1 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"><url><loc>https://326623.github.io/posts/value-of-blog.html</loc><lastmod>2020-12-19T17:11:44+08:00</lastmod></url><url><loc>https://326623.github.io/posts.html</loc><lastmod>2020-12-19T17:11:44+08:00</lastmod></url><url><loc>https://326623.github.io/</loc><lastmod>2020-12-19T17:11:44+08:00</lastmod></url><url><loc>https://326623.github.io/posts/maximum_likelihood_estimation/maximum_likelihood_estimation.html</loc><lastmod>2020-04-14T00:00:00+00:00</lastmod></url><url><loc>https://326623.github.io/posts/perturb-and-map/perturb-and-map.html</loc><lastmod>2020-03-04T00:00:00+00:00</lastmod></url><url><loc>https://326623.github.io/posts/starting/get-started.html</loc><lastmod>2020-01-21T00:00:00+00:00</lastmod></url><url><loc>https://326623.github.io/categories.html</loc></url><url><loc>https://326623.github.io/tags.html</loc></url></urlset>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>/</loc>
+    <lastmod>2024-12-03T13:38:16+11:00</lastmod>
+  </url><url>
+    <loc>/categories/</loc>
+  </url><url>
+    <loc>/tags/</loc>
+  </url>
+</urlset>
